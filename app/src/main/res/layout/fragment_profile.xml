@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg2"
+    tools:context=".screen.SignUp">
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Họ và tên"
+        android:padding="10dp"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintVertical_bias=".1"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintWidth_percent=".8"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/black"/>
+    <EditText
+        android:id="@+id/phoneNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Số điện thoại"
+        android:padding="10dp"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintVertical_bias=".1"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintWidth_percent=".8"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/black"/>
+
+    <EditText
+        android:id="@+id/passwordNew"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nhập mật khẩu mới"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password"
+        app:layout_constraintVertical_bias=".06"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintWidth_percent=".8"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/black"/>
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background"
+        android:hint="Mật khẩu"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:textColorHint="@color/black"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phoneNo"
+        app:layout_constraintVertical_bias="0.095"
+        app:layout_constraintWidth_percent=".8" />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Nhâp lại mật khẩu mới"
+        android:padding="10dp"
+        android:paddingRight="12dp"
+        android:paddingLeft="12dp"
+        android:background="@drawable/edittext_background"
+        android:textColorHint="@color/black"
+        android:visibility="gone"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordNew"
+        app:layout_constraintVertical_bias=".06"
+        app:layout_constraintHorizontal_bias=".5"
+        app:layout_constraintWidth_percent=".8"
+        android:id="@+id/rePassNew"/>
+
+
+    <Button
+        android:id="@+id/sigup_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Thay đổi"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordNew"
+        app:layout_constraintVertical_bias=".3"
+        app:layout_constraintWidth_percent=".5"
+        app:layout_constraintHorizontal_bias=".5"
+        android:background="@drawable/button_background"/>
+
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Đổi mật khẩu"
+        android:textColor="@color/white"
+        android:background="@drawable/button_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sigup_btn"
+        app:layout_constraintVertical_bias=".3"
+        app:layout_constraintWidth_percent=".5"
+        app:layout_constraintHorizontal_bias=".5"
+        android:id="@+id/changePassword"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
