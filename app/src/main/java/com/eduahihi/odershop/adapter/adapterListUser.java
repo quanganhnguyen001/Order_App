@@ -14,8 +14,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eduahihi.odershop.R;
+import com.eduahihi.odershop.database.databaseCartDao;
 import com.eduahihi.odershop.database.databaseUserDao;
 import com.eduahihi.odershop.databinding.ItemUserBinding;
+import com.eduahihi.odershop.model.cart;
 import com.eduahihi.odershop.model.user;
 import com.eduahihi.odershop.screen.fragment.cartFragment;
 import com.eduahihi.odershop.screen.fragment.cartUserFragment;
@@ -44,10 +46,19 @@ public class adapterListUser extends RecyclerView.Adapter<adapterListUser.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         int idUser = listUser.get(position);
-        user muser =mdatabaseUserDao.getUserById(idUser);
+        user muser = mdatabaseUserDao.getUserById(idUser);
         holder.binding.tvUserName.setText(muser.getName());
         holder.binding.tvUserPhone.setText(muser.getPhone());
+        new databaseCartDao(context).getCartByIdUser(idUser, new databaseCartDao.onClickGetAll() {
+            @Override
+            public void onSuccess(List<cart> list) {
 
+            }
+            @Override
+            public void onFail() {
+
+            }
+        });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +66,7 @@ public class adapterListUser extends RecyclerView.Adapter<adapterListUser.ViewHo
                 try {
                     fragment = (Fragment) fragmentClass.newInstance();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("userId",idUser);
+                    bundle.putInt("userId", idUser);
                     fragment.setArguments(bundle);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -76,6 +87,7 @@ public class adapterListUser extends RecyclerView.Adapter<adapterListUser.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemUserBinding binding;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = ItemUserBinding.bind(itemView);

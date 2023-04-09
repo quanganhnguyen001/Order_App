@@ -3,11 +3,13 @@ package com.eduahihi.odershop.screen.fragment;
 import static com.eduahihi.odershop.screen.Login.isAdmin;
 import static com.eduahihi.odershop.screen.homeActivity.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,11 +36,13 @@ public class homeFragment extends Fragment {
 
     FragmentHomeBinding binding;
     private int idCategory= -1;
+    private List<product> products = new ArrayList<>();
     public homeFragment() {
         // Required empty public constructor
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +62,32 @@ public class homeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                products.clear();
+                products = new databaseProductDao(getContext()).searchProductByName(newText);
+                adapterProduct adapter = new adapterProduct(getContext(), products);
+                binding.recyclerView1.setAdapter(adapter);
+                binding.recyclerView1.setHasFixedSize(true);
+                binding.recyclerView1.setItemViewCacheSize(20);
+                return false;
+            }
+        });
+        binding.searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                onResume();
+                return false;
+            }
+        });
         if(isAdmin){
             binding.fab.setVisibility(View.VISIBLE);
         }else{
@@ -97,7 +127,8 @@ public class homeFragment extends Fragment {
         new databaseProductDao(getContext()).getAllProduct(idCategory,new databaseProductDao.onClickGetAll() {
             @Override
             public void success(List<product> product) {
-                adapterProduct adapter = new adapterProduct(getContext(), product);
+                products = product;
+                adapterProduct adapter = new adapterProduct(getContext(), products);
                 binding.recyclerView.setAdapter(adapter);
                 binding.recyclerView.setHasFixedSize(true);
                 binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

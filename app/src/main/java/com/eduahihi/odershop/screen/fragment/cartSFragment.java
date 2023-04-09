@@ -46,7 +46,6 @@ public class cartSFragment extends Fragment {
                     binding.recyclerViewCartS.setLayoutManager(new LinearLayoutManager(getContext()));
                 }
             }
-
             @Override
             public void onFail() {
 

@@ -35,7 +35,16 @@ public class databaseCategoryDao {
         String sql = "DELETE FROM category WHERE id = ?";
         database.execSQL(sql, new String[]{String.valueOf(id)});
     }
-
+    //check category exist
+    public boolean checkCategoryExist(String name) {
+        String sql = "SELECT * FROM category WHERE name = ?";
+        Cursor cursor = database.rawQuery(sql, new String[]{name});
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.close();
+            return true;
+        }
+        return false;
+    }
     //get Allcategory
     public List<category> getAllCategory() {
         List<category> list = new ArrayList<>();

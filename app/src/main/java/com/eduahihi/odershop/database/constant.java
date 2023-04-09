@@ -58,6 +58,7 @@ public class constant {
     public static final String COLUMN_DATE_CART = "date";
 
     public static final String COLUMN_STATUS_CART = "status";
+    public static final String COLUMN_ISCART = "isCart";
 
     public static final String CREATE_TABLE_CART = "CREATE TABLE " + TABLE_CART + "("
             + COLUMN_ID_CART + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -65,7 +66,8 @@ public class constant {
             + COLUMN_ID_USER_CART + " TEXT,"
             + COLUMN_QUANTITY_CART + " INTEGER,"
             + COLUMN_DATE_CART + " TEXT,"
-            + COLUMN_STATUS_CART + " INTEGER"
+            + COLUMN_STATUS_CART + " INTEGER,"
+            + COLUMN_ISCART + " INTEGER"
             + ")";
 
     public static final String DROP_TABLE_CART = "DROP TABLE IF EXISTS " + TABLE_CART;

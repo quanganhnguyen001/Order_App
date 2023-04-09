@@ -20,12 +20,16 @@ import android.widget.Toast;
 
 import com.eduahihi.odershop.R;
 import com.eduahihi.odershop.database.databaseCartDao;
+import com.eduahihi.odershop.database.databaseOrderDao;
 import com.eduahihi.odershop.database.databaseProductDao;
 import com.eduahihi.odershop.database.databaseUserDao;
 import com.eduahihi.odershop.databinding.FragmentDetailProductBinding;
 import com.eduahihi.odershop.model.cart;
+import com.eduahihi.odershop.model.order;
 import com.eduahihi.odershop.model.product;
 import com.eduahihi.odershop.model.user;
+
+import java.util.List;
 
 
 public class detailProductFragment extends Fragment {
@@ -111,13 +115,20 @@ public class detailProductFragment extends Fragment {
         binding.btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mProduct.getQuantity().equals("0")) {
+                    Toast.makeText(getContext(), "Sản phẩm đã hết hàng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(Integer.parseInt(binding.tvQuantityC.getText().toString() )== 0) {
+                    Toast.makeText(getContext(), "Vui lòng chọn số lượng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (mUser != null) {
                     String date = System.currentTimeMillis() + "";
-
                     new databaseCartDao(getContext()).getCartByIdUserAndIdProduct(mUser.getId(), Integer.parseInt(mProduct.getId()), new databaseCartDao.onClickGetOne() {
                         @Override
                         public void onSuccess(cart cart) {
-                            if (!cart.isStatus()) {
+                            if (cart.isStatus() == 0) {
                                 if (cart != null) {
                                     cart.setQuantity(cart.getQuantity() + Integer.parseInt(binding.tvQuantityC.getText().toString()));
                                     new databaseCartDao(getContext()).updateCart(cart, new databaseCartDao.onClickAddCard() {
@@ -145,7 +156,7 @@ public class detailProductFragment extends Fragment {
                                         }
                                     });
                                 }
-                            }else{
+                            } else {
                                 new databaseCartDao(getContext()).insertCart(new cart(Integer.parseInt(mProduct.getId()),
                                         mUser.getId(), Integer.parseInt(binding.tvQuantityC.getText().toString()), Long.parseLong(date)), new databaseCartDao.onClickAddCard() {
                                     @Override
@@ -210,7 +221,6 @@ public class detailProductFragment extends Fragment {
                 }
             }
         });
-
     }
 
     //convert byte array to bitmap

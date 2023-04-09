@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
@@ -14,6 +15,7 @@ import com.eduahihi.odershop.databinding.ActivityHomeBinding;
 import com.eduahihi.odershop.screen.fragment.addcategoryFragment;
 import com.eduahihi.odershop.screen.fragment.cartFragment;
 import com.eduahihi.odershop.screen.fragment.cartSFragment;
+import com.eduahihi.odershop.screen.fragment.hoadonUserFragment;
 import com.eduahihi.odershop.screen.fragment.homeFragment;
 import com.eduahihi.odershop.screen.fragment.profileFragment;
 import com.shrikanthravi.customnavigationdrawer2.data.MenuItem;
@@ -46,6 +48,7 @@ public class homeActivity extends AppCompatActivity {
         } else {
             menuItems.add(new MenuItem("Sản phẩm", R.drawable.bg3));
             menuItems.add(new MenuItem("Giỏ hàng", R.drawable.bg2));
+            menuItems.add(new MenuItem("Hoá Đơn", R.drawable.bg3));
             menuItems.add(new MenuItem("Trang cá Nhân", R.drawable.bg3));
             menuItems.add(new MenuItem("Đăng xuất", R.drawable.bg1));
         }
@@ -78,10 +81,15 @@ public class homeActivity extends AppCompatActivity {
                             fragmentClass = cartFragment.class;
                             break;
                         case 2:
-                            fragmentClass = profileFragment.class;
+                            fragmentClass = hoadonUserFragment.class;
                             break;
                         case 3:
-                            System.exit(0);
+                            fragmentClass = profileFragment.class;
+                            break;
+                        case 4:
+                            startActivity(new Intent(homeActivity.this, MainActivity.class));
+                            finish();
+                            break;
                     }
                 } else {
                     switch (position) {
@@ -95,7 +103,9 @@ public class homeActivity extends AppCompatActivity {
                             fragmentClass = cartSFragment.class;
                             break;
                         case 3:
-                            System.exit(0);
+                            startActivity(new Intent(homeActivity.this, MainActivity.class));
+                            finish();
+                            break;
                     }
                 }
             }

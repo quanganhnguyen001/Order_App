@@ -65,11 +65,25 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/cartProductTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cartProductQuantity"
+                android:layout_toRightOf="@+id/cartProductImage"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="Tổng tiền"
+                android:textSize="20sp"
+                android:textStyle="bold|italic" />
+
+
+            <TextView
                 android:id="@+id/my_order_product_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_margin="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
@@ -84,9 +98,8 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_below="@+id/my_order_product_delete"
-                android:layout_margin="10dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
@@ -94,14 +107,14 @@
                 android:layout_toRightOf="@+id/cartProductQuantity"
                 android:gravity="right"
                 android:text="Đã thanh toán"
-                android:textSize="20sp"
                 android:textColor="#08FF00"
+                android:textSize="20sp"
                 android:textStyle="bold|italic" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_below="@+id/cartProductQuantity"
+                android:layout_below="@+id/cartProductTime"
                 android:background="#000000" />
 
         </RelativeLayout>

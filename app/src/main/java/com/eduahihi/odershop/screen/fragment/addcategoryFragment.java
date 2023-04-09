@@ -55,6 +55,10 @@ public class addcategoryFragment extends Fragment {
                     binding.etCategoryName.setError("Please enter category name");
                     return;
                 }
+                if(new databaseCategoryDao(getContext()).checkCategoryExist(name)){
+                    binding.etCategoryName.setError("Category name already exists");
+                    return;
+                }
                 category category = new category(name);
                 databaseCategoryDao databaseCategoryDao = new databaseCategoryDao(getContext());
                 databaseCategoryDao.insertCategory(category);

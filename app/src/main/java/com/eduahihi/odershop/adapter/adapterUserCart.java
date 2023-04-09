@@ -23,6 +23,7 @@ import com.eduahihi.odershop.databinding.ItemCartBinding;
 import com.eduahihi.odershop.model.cart;
 import com.eduahihi.odershop.model.product;
 import com.eduahihi.odershop.screen.fragment.cartFragment;
+import com.eduahihi.odershop.screen.fragment.cartUserFragment;
 import com.eduahihi.odershop.screen.homeActivity;
 
 import java.util.List;
@@ -55,18 +56,88 @@ public class adapterUserCart extends RecyclerView.Adapter<adapterUserCart.ViewHo
     @Override
     public void onBindViewHolder(@NonNull adapterUserCart.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         cart cart = list.get(position);
-        if (!cart.isStatus()) {
-            product mProduct = mdatabaseProductDao.getProductById(cart.getId_product());
+        product mProduct = mdatabaseProductDao.getProductById(cart.getId_product());
+        if ((cart.isStatus() == 0 || cart.isStatus() == 2)) {
             holder.binding.cartProductName.setText(mProduct.getName());
             double price = Double.parseDouble(mProduct.getPrice()) * cart.getQuantity();
             String priceString = String.format("%.2f", price);
             holder.binding.cartProductPrice.setText(priceString + " VND");
             holder.binding.cartProductQuantity.setText("Quantity: " + cart.getQuantity());
             holder.binding.cartProductImage.setImageBitmap(getBitmapFromByte(mProduct.getImage()));
-        }
+            holder.binding.status.setVisibility(View.VISIBLE);
+            if (cart.isStatus() == 1) {
+                holder.binding.status.setText("Đã thanh toán");
+                holder.binding.status.setTextColor(context.getResources().getColor(R.color.green));
+            } else if (cart.isStatus() == 2) {
+                holder.binding.status.setText("Đơn đã huỷ");
+                holder.binding.status.setTextColor(context.getResources().getColor(R.color.red));
+            } else {
+                holder.binding.status.setText("Chưa thanh toán");
+                holder.binding.status.setTextColor(context.getResources().getColor(R.color.red));
+            }
+            holder.binding.myOrderProductDelete.setVisibility(View.VISIBLE);
+            holder.binding.myOrderProductDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Are you sure?")
+                            .setContentText("Won't be able to recover this file!")
+                            .setConfirmText("Yes,delete it!")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    new databaseCartDao(context).deleteCart(cart.getId(), new databaseCartDao.onClickDeleteCart() {
+                                        @Override
+                                        public void onSuccess() {
+                                            mProduct.setQuantity(mProduct.getQuantity() + cart.getQuantity());
+                                            mdatabaseProductDao.updateProduct(mProduct, new databaseProductDao.onClickSaveProduct() {
+                                                @Override
+                                                public void success() {
+                                                    list.remove(position);
+                                                    notifyDataSetChanged();
+                                                    //dismess
+                                                    sDialog.dismissWithAnimation();
+                                                    // Create new fragment and transaction
+                                                    Class fragmentClass = cartUserFragment.class;
+                                                    try {
+                                                        fragment = (Fragment) fragmentClass.newInstance();
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                    // Insert the fragment by replacing any existing fragment
+                                                    if (fragment != null) {
+                                                        FragmentManager fragmentManager = ((homeActivity) context).getSupportFragmentManager();
+                                                        fragmentManager.beginTransaction().setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out).replace(R.id.frameLayout, fragment).commit();
+                                                    }
+                                                }
 
-        holder.binding.myOrderProductDelete.setVisibility(View.GONE);
-        holder.binding.status.setVisibility(View.GONE);
+                                                @Override
+                                                public void fail() {
+                                                    Log.d("TAGProduct", "fail: ");
+                                                }
+                                            });
+
+                                        }
+
+                                        @Override
+                                        public void onFail() {
+                                            Log.d("TAGCart", "onFail: ");
+                                        }
+                                    });
+
+                                }
+                            })
+                            .setCancelButton("No,cancel plx!", new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.cancel();
+                                }
+                            })
+                            .show();
+
+                }
+            });
+        }
     }
 
     //convert byte to bitmap

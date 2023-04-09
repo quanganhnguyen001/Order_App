@@ -68,7 +68,17 @@
             android:padding="10dp"
             android:textSize="18sp" />
 
-
+        <Button
+            android:id="@+id/btnClearCart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="cancel shopping cart"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/edittext_background"
+            android:textColor="@color/white"
+            android:padding="10dp"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </RelativeLayout>

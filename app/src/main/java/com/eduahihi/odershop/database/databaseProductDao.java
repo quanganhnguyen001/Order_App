@@ -85,6 +85,49 @@ public class databaseProductDao {
         }
     }
 
+    //update quatity product by id product
+    public void updateQuantityProduct(String id,int quantity,onClickSaveProduct onClickSaveProduct){
+        ContentValues contentValues = new ContentValues();
+        int quantityProduct = getQuantityProductById(id);
+        quantity = quantityProduct + quantity;
+        contentValues.put(COLUMN_QUANTITY_PRODUCT,quantity);
+        long result = sqLiteDatabase.update(TABLE_PRODUCT,contentValues,COLUMN_ID_PRODUCT + " = ?",new String[]{id});
+        if (result > 0){
+            onClickSaveProduct.success();
+        }else {
+            onClickSaveProduct.fail();
+        }
+    }
+    //get quantity product by id product
+    public int getQuantityProductById(String id){
+        int quantity = 0;
+        String query = "SELECT * FROM " + TABLE_PRODUCT + " WHERE " + COLUMN_ID_PRODUCT + " = " + id;
+        Cursor cursor = sqLiteDatabase.rawQuery(query,null);
+        if (cursor.moveToFirst()){
+            quantity = cursor.getInt(4);
+        }
+        return quantity;
+    }
+    //search product by name product
+    public List<product> searchProductByName(String name){
+        List<product> products = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_PRODUCT + " WHERE " + COLUMN_NAME_PRODUCT + " LIKE '%" + name + "%'";
+        Cursor cursor = sqLiteDatabase.rawQuery(query,null);
+        if (cursor.moveToFirst()){
+            do {
+                product product = new product();
+                product.setId(cursor.getString(0));
+                product.setName(cursor.getString(1));
+                product.setPrice(cursor.getString(2));
+                product.setImage(cursor.getBlob(3));
+                product.setQuantity(cursor.getString(4));
+                product.setDescription(cursor.getString(5));
+                product.setId_category(cursor.getString(6));
+                products.add(product);
+            }while (cursor.moveToNext());
+        }
+        return products;
+    }
     public void updateProduct(product product,onClickSaveProduct onClickSaveProduct){
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME_PRODUCT,product.getName());

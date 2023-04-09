@@ -22,6 +22,7 @@ import com.eduahihi.odershop.database.databaseProductDao;
 import com.eduahihi.odershop.databinding.FragmentCartUserBinding;
 import com.eduahihi.odershop.model.cart;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -31,6 +32,7 @@ public class cartUserFragment extends Fragment {
 
     int userId = -1;
     FragmentCartUserBinding binding;
+    private List<cart> listCart = new ArrayList<>();
 
     public cartUserFragment() {
         // Required empty public constructor
@@ -46,8 +48,7 @@ public class cartUserFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentCartUserBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -61,35 +62,79 @@ public class cartUserFragment extends Fragment {
         binding.btnCheckout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Are you sure?")
-                        .setContentText("Won't be able to recover this file!")
-                        .setConfirmText("Yes,delete it!")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE).setTitleText("Are you sure?").setContentText("Won't be able to recover this file!").setConfirmText("Yes,delete it!").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        new databaseCartDao(getContext()).updateStatusCart(userId, 1,new databaseCartDao.onClickAddCard() {
                             @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                new databaseCartDao(getContext()).updateStatusCart(userId, new databaseCartDao.onClickAddCard() {
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(getContext(), "Checkout success", Toast.LENGTH_SHORT).show();
-                                        loadCart();
-                                    }
+                            public void onSuccess() {
+                                Toast.makeText(getContext(), "Checkout success", Toast.LENGTH_SHORT).show();
+                                loadCart();
+                            }
 
-                                    @Override
-                                    public void onFail() {
-                                        Toast.makeText(getContext(), "Checkout fail", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                sDialog.dismissWithAnimation();
-                            }
-                        })
-                        .setCancelButton("No,cancel plx!", new SweetAlertDialog.OnSweetClickListener() {
                             @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.cancel();
+                            public void onFail() {
+                                Toast.makeText(getContext(), "Checkout fail", Toast.LENGTH_SHORT).show();
                             }
-                        })
-                        .show();
+                        });
+                        sDialog.dismissWithAnimation();
+                    }
+                }).setCancelButton("No,cancel plx!", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.cancel();
+                    }
+                }).show();
+            }
+        });
+        binding.btnClearCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE).setTitleText("Are you sure?").setContentText("Won't be able to recover this file!").setConfirmText("Yes,delete it!").setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        for (cart c : listCart) {
+                            new databaseCartDao(getContext()).getCartByIdUserAndIdProduct(userId, c.getId_product(), new databaseCartDao.onClickGetOne() {
+                                @Override
+                                public void onSuccess(cart cart) {
+                                    new databaseProductDao(getContext()).updateQuantityProduct(String.valueOf(cart.getId_product()), cart.getQuantity(), new databaseProductDao.onClickSaveProduct() {
+                                        @Override
+                                        public void success() {
+                                            new databaseCartDao(getContext()).updateStatusCart(userId, 2,new databaseCartDao.onClickAddCard() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    Toast.makeText(getContext(), "Cancel success", Toast.LENGTH_SHORT).show();
+                                                    loadCart();
+                                                }
+
+                                                @Override
+                                                public void onFail() {
+                                                    Toast.makeText(getContext(), "Checkout fail", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void fail() {
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFail() {
+                                    Toast.makeText(getContext(), "Delete fail", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        sDialog.dismissWithAnimation();
+                    }
+                }).setCancelButton("No,cancel plx!", new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.cancel();
+                    }
+                }).show();
             }
         });
     }
@@ -98,14 +143,15 @@ public class cartUserFragment extends Fragment {
         new databaseCartDao(getContext()).getCartsByIdUser(userId, new databaseCartDao.onClickGetAll() {
             @Override
             public void onSuccess(List<cart> list) {
-
+                listCart = list;
+                list.removeIf(cart -> cart.getStatus() == 1 );
                 binding.cartRecyclerView.setAdapter(new adapterUserCart(getContext(), list));
                 binding.cartRecyclerView.setHasFixedSize(true);
                 binding.cartRecyclerView.setItemViewCacheSize(20);
                 binding.cartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 double total = 0;
                 for (cart c : list) {
-                    if (!c.isStatus()) {
+                    if (c.isStatus() == 0) {
                         double price = Double.parseDouble(new databaseProductDao(getContext()).getProductById(c.getId_product()).getPrice());
                         total += price * c.getQuantity();
                     }

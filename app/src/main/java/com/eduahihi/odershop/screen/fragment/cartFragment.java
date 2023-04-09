@@ -57,13 +57,14 @@ public class cartFragment extends Fragment {
         new databaseCartDao(getContext()).getCartByIdUser(userId, new databaseCartDao.onClickGetAll() {
             @Override
             public void onSuccess(List<cart> list) {
-                binding.cartRecyclerView.setAdapter(new adapterCart(getContext(), list));
+                list.removeIf(cart ->cart.getIsCart() == 1);
+                binding.cartRecyclerView.setAdapter(new adapterCart(getContext(), list,true));
                 binding.cartRecyclerView.setHasFixedSize(true);
                 binding.cartRecyclerView.setItemViewCacheSize(20);
                 binding.cartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 double total = 0;
                 for (cart c : list) {
-                    if (!c.isStatus()) {
+                    if (c.isStatus() == 0) {
                         double price = Double.parseDouble(new databaseProductDao(getContext()).getProductById(c.getId_product()).getPrice());
                         total += price * c.getQuantity();
                     }
