@@ -148,50 +148,7 @@ public class adapterCart extends RecyclerView.Adapter<adapterCart.ViewHolder> {
 
             }
         });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Are you sure?")
-                        .setContentText("Won't be able to recover this file!")
-                        .setConfirmText("Yes,delete it!")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                new databaseCartDao(context).updateCartById(cart.getId(), 1, new databaseCartDao.onClickDeleteCart() {
-                                    @Override
-                                    public void onSuccess() {
-                                        Toast.makeText(context, "cancel success", Toast.LENGTH_SHORT).show();
-                                        Class fragmentClass = cartFragment.class;
-                                        try {
-                                            fragment = (Fragment) fragmentClass.newInstance();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                        // Insert the fragment by replacing any existing fragment
-                                        if (fragment != null) {
-                                            FragmentManager fragmentManager = ((homeActivity) context).getSupportFragmentManager();
-                                            fragmentManager.beginTransaction().setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out).replace(R.id.frameLayout, fragment).commit();
-                                        }
-                                    }
 
-                                    @Override
-                                    public void onFail() {
-
-                                    }
-                                });
-                            }
-                        })
-                        .setCancelButton("No,cancel plx!", new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.cancel();
-                            }
-                        })
-                        .show();
-
-            }
-        });
 
     }
 

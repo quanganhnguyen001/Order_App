@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.eduahihi.odershop.R;
 import com.eduahihi.odershop.database.databaseCategoryDao;
-import com.eduahihi.odershop.databinding.ItemCategoryBinding;
+
 import com.eduahihi.odershop.databinding.ItemCategoryaddBinding;
 import com.eduahihi.odershop.model.category;
 import com.example.flatdialoglibrary.dialog.FlatDialog;
@@ -81,7 +81,7 @@ public class adapterAddCategory extends RecyclerView.Adapter<adapterAddCategory.
             @Override
             public void onClick(View v) {
                 new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Are you sure?")
+                        .setTitleText("")
                         .setContentText("Won't be able to recover this file!")
                         .setConfirmText("Yes,delete it!")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
